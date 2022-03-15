@@ -1,0 +1,107 @@
+{
+    "m_SelectedDeviceId": "f18f30c9",
+    "m_SelectedPackage": {
+        "deviceId": "f18f30c9",
+        "name": "Harry.Test.AR",
+        "processId": 24527,
+        "exited": false
+    },
+    "m_SelectedPriority": 1,
+    "m_KnownPackagesForSerialization": [
+        {
+            "deviceId": "f18f30c9",
+            "name": "net.oneplus.launcher",
+            "processId": 25670,
+            "exited": false
+        },
+        {
+            "deviceId": "f18f30c9",
+            "name": "Harry.Test.AR",
+            "processId": 20656,
+            "exited": true
+        },
+        {
+            "deviceId": "f18f30c9",
+            "name": "Harry.Test.AR",
+            "processId": 21744,
+            "exited": true
+        },
+        {
+            "deviceId": "f18f30c9",
+            "name": "Harry.Test.AR",
+            "processId": 22150,
+            "exited": true
+        },
+        {
+            "deviceId": "f18f30c9",
+            "name": "Harry.Test.AR",
+            "processId": 22956,
+            "exited": true
+        },
+        {
+            "deviceId": "f18f30c9",
+            "name": "Harry.Test.AR",
+            "processId": 24044,
+            "exited": true
+        },
+        {
+            "deviceId": "f18f30c9",
+            "name": "Harry.Test.AR",
+            "processId": 24527,
+            "exited": false
+        }
+    ],
+    "m_Tags": {
+        "m_Entries": [
+            {
+                "m_Name": "Filter by all listed tags",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "No Filter",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "Tag Control...",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "Unity",
+                "m_Selected": true
+            },
+            {
+                "m_Name": "CRASH",
+                "m_Selected": false
+            }
+        ]
+    },
+    "m_MemoryViewerState": {
+        "MemoryWindowHeight": 300.0,
+        "MemoryWindowWidth": 170.0,
+        "MemoryTypeEnabled": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
+        "MemoryGroup": 2,
+        "Behavior": 0
+    },
+    "m_Filter": "",
+    "m_FilterIsRegularExpression": false,
+    "m_SymbolPaths": []
+}
