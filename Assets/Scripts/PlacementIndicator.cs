@@ -7,10 +7,17 @@ using UnityEngine.XR.ARFoundation;
 public class PlacementIndicator : MonoBehaviour
 {
     [SerializeField]
+    private ARSession session;
+
+    [SerializeField]
     private GameObject placementIndicator;
 
     [SerializeField]
     private List<GameObject> objectToPlaceList = new List<GameObject>();
+    private int objectToPlaceIndex = -1;
+
+    [SerializeField]
+    private ARPlaneManager planeManager;
 
     //ray casting
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
@@ -24,7 +31,7 @@ public class PlacementIndicator : MonoBehaviour
     //screen touching
     private bool onTouchHold = false;
     private Vector2 touchPosition = default;
-    private bool touchingObject = false;
+    //private bool touchingObject = false;
 
     //placing and selecting object
     public GameObject selectedObject = null;
@@ -47,7 +54,12 @@ public class PlacementIndicator : MonoBehaviour
     [SerializeField]
     private Text scanningText;
     [SerializeField]
-    private Button clearButton;
+    private Button clearObjectsButton;
+    [SerializeField]
+    private Button ResetSceneButton;
+    [SerializeField]
+    private Button TogglePlaneDetectionButton;
+
     void Start()
     {
         //canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
@@ -56,7 +68,9 @@ public class PlacementIndicator : MonoBehaviour
         //rotationSlider = GameObject.Find("DestoryObjectButton").GetComponent<Slider>();
 
         //raycastManager = FindObjectOfType<ARRaycastManager>();
-        clearButton.gameObject.SetActive(true);
+        clearObjectsButton.gameObject.SetActive(true);
+        ResetSceneButton.gameObject.SetActive(true);
+        TogglePlaneDetectionButton.gameObject.SetActive(true);
 
     }
 
@@ -137,26 +151,25 @@ public class PlacementIndicator : MonoBehaviour
         if (placementPoseIsValid && placedObjectCount < maxObjectPlacedCount && selectedObject == null)
         {
             newObjectPlaced = Instantiate(objectToPlaceList[0], placementIndicator.transform.position, placementIndicator.transform.rotation);
+            newObjectPlaced.GetComponent<Outline>().enabled = false;
             placedObjectCount++;
             if(currentNameNum == -1)
             {
                 newObjectPlaced.name = placedObjectCount.ToString() + "-" + objectToPlaceList[0].name;
-
             }
             else
             {
                 newObjectPlaced.name = currentNameNum.ToString() + "-" + objectToPlaceList[0].name;
                 currentNameNum = -1;
-
             }
             objectPlacedList.Add(newObjectPlaced);
 
             Debug.Log("placing object");
 
-            foreach (var x in objectPlacedList)
-            {
-                Debug.Log("currently in list: " + x.name);
-            }
+            //foreach (var x in objectPlacedList)
+            //{
+            //    Debug.Log("currently in list: " + x.name);
+            //}
 
         }
         else
@@ -193,7 +206,7 @@ public class PlacementIndicator : MonoBehaviour
         }
     }
 
-    public void ClearScene()
+    public void ClearObjects()
     {
         for (int i = 0; i < objectPlacedList.Count; i++)
         {
@@ -205,13 +218,30 @@ public class PlacementIndicator : MonoBehaviour
         currentNameNum = -1;
 
         Debug.Log("clearing scene");
-
-        foreach (var x in objectPlacedList)
-        {
-            Debug.Log("currently in list: " + x.name);
-        }
+             
+        
+        //foreach (var x in objectPlacedList)
+        //{
+        //    Debug.Log("currently in list: " + x.name);
+        //}
     }
-    
+
+    public void ResetScene()
+    {
+        ClearObjects();
+        session.Reset();
+    }
+    public void TogglePlaneDetection()
+    {
+        planeManager.enabled = !planeManager.enabled;
+
+        foreach (ARPlane plane in planeManager.trackables)
+        {
+            plane.gameObject.SetActive(planeManager.enabled);
+        }
+        TogglePlaneDetectionButton.GetComponentInChildren<Text>().text = planeManager.enabled ? "Disable Plane Detection" : "Enable Plane Detection";
+        Debug.Log("toggling button to" + planeManager.enabled.ToString());
+    }
     void DragObject()
     {
         if(Input.touchCount > 0)
@@ -241,10 +271,14 @@ public class PlacementIndicator : MonoBehaviour
                         {
                             if (objectPlacedList[i].name == hitObject.collider.gameObject.name)
                             {
-                                touchingObject = true;
+                                //touchingObject = true;
+                                if (selectedObject != null)
+                                {
+                                    selectedObject.GetComponent<Outline>().enabled = false;
+                                }
                                 selectedObject = objectPlacedList[i];
                                 Debug.Log("currently selected: " + selectedObject.name);
-                                                               
+                                selectedObject.GetComponent<Outline>().enabled = true;                                                                                               
                             }
                         }
                     }
@@ -257,6 +291,7 @@ public class PlacementIndicator : MonoBehaviour
                 }
                 else
                 {
+                    selectedObject.GetComponent<Outline>().enabled = false;
                     selectedObject = null;
                     Debug.Log("no object selected");
 
@@ -274,28 +309,23 @@ public class PlacementIndicator : MonoBehaviour
             {
                 onTouchHold = false;
 
-                if (touchingObject)
-                {
-                    touchingObject = false;
-                }
+                //if (touchingObject)
+                //{
+                //    touchingObject = false;
+                //}
 
             }
 
-            if (onTouchHold && selectedObject != null && touchingObject)
+            //if (onTouchHold && selectedObject != null && touchingObject)
+            if (onTouchHold && selectedObject != null)
             {
                 if (raycastManager.Raycast(touchPosition, hits, UnityEngine.XR.ARSubsystems.TrackableType.Planes))
                 {
                     Pose hitPose = hits[0].pose;                                        
                     selectedObject.transform.position = hitPose.position;
-                    selectedObject.transform.rotation = hitPose.rotation;
-                                       
+                    selectedObject.transform.rotation = hitPose.rotation;                                       
                 }
-            }
-            
-        }
-        
-    
-        
-        
+            }            
+        }                 
     }
 }

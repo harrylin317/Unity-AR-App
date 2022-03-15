@@ -1280,8 +1280,8 @@ GameObject:
   m_Component:
   - component: {fileID: 9149924059948800802}
   - component: {fileID: 2889942759319372120}
-  - component: {fileID: 6010606332540317220}
   - component: {fileID: 6953608707671153792}
+  - component: {fileID: -8551985015646713011}
   m_Layer: 0
   m_Name: Fox
   m_TagString: Spawnable
@@ -1324,20 +1324,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!64 &6010606332540317220
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8480524220797551000}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -2012753172922253885, guid: 8f0cf4218cd736142a75f73f2ce615ba, type: 3}
 --- !u!65 &6953608707671153792
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1349,8 +1335,26 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2.7}
-  m_Center: {x: 0, y: 1, z: -0.4}
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 1, z: -0.5}
+--- !u!114 &-8551985015646713011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8480524220797551000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &8686782292764881162
 GameObject:
   m_ObjectHideFlags: 0
