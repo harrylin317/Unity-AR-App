@@ -34,6 +34,7 @@ public class PlacementIndicator : MonoBehaviour
     //private bool touchingObject = false;
 
     //placing and selecting object
+    [HideInInspector]
     public GameObject selectedObject = null;
     private GameObject newObjectPlaced = null;
     private List<GameObject> objectPlacedList = new List<GameObject>();
@@ -45,21 +46,22 @@ public class PlacementIndicator : MonoBehaviour
     //UI
     [SerializeField]
     private Button placeObjectButton;
-    [SerializeField]
-    private Button destroyButton;
-    [SerializeField]
-    private GameObject rotationButtons;
-    [SerializeField]
-    private GameObject scaleButtons;
+    //[SerializeField]
+    //private Button destroyButton;
+    //[SerializeField]
+    //private GameObject rotationButtons;
+    //[SerializeField]
+    //private GameObject scaleButtons;
     [SerializeField]
     private Text scanningText;
+    //[SerializeField]
+    //private Button clearObjectsButton;
+    //[SerializeField]
+    //private Button ResetSceneButton;
     [SerializeField]
-    private Button clearObjectsButton;
+    private Button togglePlaneDetectionButton;
     [SerializeField]
-    private Button ResetSceneButton;
-    [SerializeField]
-    private Button TogglePlaneDetectionButton;
-
+    private GameObject selectObjectButtons;
     void Start()
     {
         //canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
@@ -68,9 +70,13 @@ public class PlacementIndicator : MonoBehaviour
         //rotationSlider = GameObject.Find("DestoryObjectButton").GetComponent<Slider>();
 
         //raycastManager = FindObjectOfType<ARRaycastManager>();
-        clearObjectsButton.gameObject.SetActive(true);
-        ResetSceneButton.gameObject.SetActive(true);
-        TogglePlaneDetectionButton.gameObject.SetActive(true);
+        //clearObjectsButton.gameObject.SetActive(true);
+        //ResetSceneButton.gameObject.SetActive(true);
+        //togglePlaneDetectionButton.gameObject.SetActive(true);
+        Debug.Log("before");
+        selectObjectButtons.SetActive(false);
+        Debug.Log("after");
+
 
     }
 
@@ -102,10 +108,9 @@ public class PlacementIndicator : MonoBehaviour
         if (selectedObject != null)
         {
             placeObjectButton.gameObject.SetActive(false);
-            destroyButton.gameObject.SetActive(true);
-            scaleButtons.gameObject.SetActive(true);
-            rotationButtons.gameObject.SetActive(true);
-            
+            selectObjectButtons.SetActive(true);
+
+
         }
         else
         {
@@ -120,9 +125,8 @@ public class PlacementIndicator : MonoBehaviour
                 scanningText.gameObject.SetActive(true);
                 placeObjectButton.gameObject.SetActive(false);
             }
-            destroyButton.gameObject.SetActive(false);
-            scaleButtons.gameObject.SetActive(false);
-            rotationButtons.gameObject.SetActive(false);
+            selectObjectButtons.SetActive(false);
+
 
         }
     }
@@ -239,7 +243,7 @@ public class PlacementIndicator : MonoBehaviour
         {
             plane.gameObject.SetActive(planeManager.enabled);
         }
-        TogglePlaneDetectionButton.GetComponentInChildren<Text>().text = planeManager.enabled ? "Disable Plane Detection" : "Enable Plane Detection";
+        togglePlaneDetectionButton.GetComponentInChildren<Text>().text = planeManager.enabled ? "Disable Plane Detection" : "Enable Plane Detection";
         Debug.Log("toggling button to" + planeManager.enabled.ToString());
     }
     void DragObject()
@@ -261,7 +265,6 @@ public class PlacementIndicator : MonoBehaviour
                 RaycastHit hitObject;
                 if(Physics.Raycast(ray, out hitObject))
                 {
-
                     if (hitObject.collider.gameObject.tag == "Spawnable")
                     {
                         //onTouchHold = true;
@@ -278,20 +281,23 @@ public class PlacementIndicator : MonoBehaviour
                                 }
                                 selectedObject = objectPlacedList[i];
                                 Debug.Log("currently selected: " + selectedObject.name);
-                                selectedObject.GetComponent<Outline>().enabled = true;                                                                                               
+                                selectedObject.GetComponent<Outline>().enabled = true;
                             }
                         }
                     }
-                    
-                    //Debug.Log("Name is: " + hitObject.collider.gameObject.name);
-                    //Debug.Log("Tag is: " + hitObject.collider.gameObject.tag);
+
+                    Debug.Log("Name is: " + hitObject.collider.gameObject.name);
+                    Debug.Log("Tag is: " + hitObject.collider.gameObject.tag);
                     /*onTouchHold = true;
                     Destroy(hitObject.transform);*/
 
                 }
                 else
                 {
-                    selectedObject.GetComponent<Outline>().enabled = false;
+                    if(selectedObject != null)
+                    {
+                        selectedObject.GetComponent<Outline>().enabled = false;
+                    }
                     selectedObject = null;
                     Debug.Log("no object selected");
 
