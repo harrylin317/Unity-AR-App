@@ -14,7 +14,10 @@ public class PlacementIndicator : MonoBehaviour
 
     [SerializeField]
     private List<GameObject> objectToPlaceList = new List<GameObject>();
-    private int objectToPlaceIndex = -1;
+    private int objectToPlaceIndex = 0;
+    [SerializeField]
+    private GameObject changeObjectButtons;
+    private Text objectToPlaceText;
 
     [SerializeField]
     private ARPlaneManager planeManager;
@@ -46,37 +49,18 @@ public class PlacementIndicator : MonoBehaviour
     //UI
     [SerializeField]
     private Button placeObjectButton;
-    //[SerializeField]
-    //private Button destroyButton;
-    //[SerializeField]
-    //private GameObject rotationButtons;
-    //[SerializeField]
-    //private GameObject scaleButtons;
     [SerializeField]
     private Text scanningText;
-    //[SerializeField]
-    //private Button clearObjectsButton;
-    //[SerializeField]
-    //private Button ResetSceneButton;
     [SerializeField]
     private Button togglePlaneDetectionButton;
     [SerializeField]
     private GameObject selectObjectButtons;
     void Start()
-    {
-        //canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-        //placeObjectButton = GameObject.Find("PlaceObjectButton").GetComponent<Button>();
-        //destroyButton = GameObject.Find("DestroyObjectButton").GetComponent<Button>();
-        //rotationSlider = GameObject.Find("DestoryObjectButton").GetComponent<Slider>();
-
+    {        
         //raycastManager = FindObjectOfType<ARRaycastManager>();
-        //clearObjectsButton.gameObject.SetActive(true);
-        //ResetSceneButton.gameObject.SetActive(true);
-        //togglePlaneDetectionButton.gameObject.SetActive(true);
-        Debug.Log("before");
-        selectObjectButtons.SetActive(false);
-        Debug.Log("after");
-
+        
+        objectToPlaceText = changeObjectButtons.GetComponentInChildren<Text>();
+        objectToPlaceText.text = objectToPlaceList[objectToPlaceIndex].name;
 
     }
 
@@ -109,8 +93,7 @@ public class PlacementIndicator : MonoBehaviour
         {
             placeObjectButton.gameObject.SetActive(false);
             selectObjectButtons.SetActive(true);
-
-
+            changeObjectButtons.SetActive(false);
         }
         else
         {
@@ -118,16 +101,16 @@ public class PlacementIndicator : MonoBehaviour
             {
                 scanningText.gameObject.SetActive(false);
                 placeObjectButton.gameObject.SetActive(true);
+                changeObjectButtons.SetActive(true);
 
             }
             else
             {
                 scanningText.gameObject.SetActive(true);
                 placeObjectButton.gameObject.SetActive(false);
+                changeObjectButtons.SetActive(false);
             }
             selectObjectButtons.SetActive(false);
-
-
         }
     }
 
@@ -154,21 +137,23 @@ public class PlacementIndicator : MonoBehaviour
     {
         if (placementPoseIsValid && placedObjectCount < maxObjectPlacedCount && selectedObject == null)
         {
-            newObjectPlaced = Instantiate(objectToPlaceList[0], placementIndicator.transform.position, placementIndicator.transform.rotation);
+            Debug.Log("placing object " + objectToPlaceList[objectToPlaceIndex].name);
+
+            newObjectPlaced = Instantiate(objectToPlaceList[objectToPlaceIndex], placementIndicator.transform.position, placementIndicator.transform.rotation);
             newObjectPlaced.GetComponent<Outline>().enabled = false;
             placedObjectCount++;
             if(currentNameNum == -1)
             {
-                newObjectPlaced.name = placedObjectCount.ToString() + "-" + objectToPlaceList[0].name;
+                newObjectPlaced.name = placedObjectCount.ToString() + "-" + objectToPlaceList[objectToPlaceIndex].name;
             }
             else
             {
-                newObjectPlaced.name = currentNameNum.ToString() + "-" + objectToPlaceList[0].name;
+                newObjectPlaced.name = currentNameNum.ToString() + "-" + objectToPlaceList[objectToPlaceIndex].name;
                 currentNameNum = -1;
             }
             objectPlacedList.Add(newObjectPlaced);
 
-            Debug.Log("placing object");
+            Debug.Log("placed object "+ newObjectPlaced.name);
 
             //foreach (var x in objectPlacedList)
             //{
@@ -246,6 +231,34 @@ public class PlacementIndicator : MonoBehaviour
         togglePlaneDetectionButton.GetComponentInChildren<Text>().text = planeManager.enabled ? "Disable Plane Detection" : "Enable Plane Detection";
         Debug.Log("toggling button to" + planeManager.enabled.ToString());
     }
+
+    public void SelectObjectRight()
+    {
+        if (objectToPlaceIndex == objectToPlaceList.Count - 1)
+        {
+            objectToPlaceIndex = 0;
+        }
+        else objectToPlaceIndex++;
+
+        Debug.Log("current index" + objectToPlaceIndex.ToString());
+        objectToPlaceText.text = objectToPlaceList[objectToPlaceIndex].name;
+
+    }
+    public void SelectObjectLeft()
+    {
+        if (objectToPlaceIndex == 0)
+        {
+            objectToPlaceIndex = objectToPlaceList.Count - 1;
+        }
+        else objectToPlaceIndex--;
+
+        Debug.Log("current index" + objectToPlaceIndex.ToString());
+        objectToPlaceText.text = objectToPlaceList[objectToPlaceIndex].name;
+
+
+    }
+
+
     void DragObject()
     {
         if(Input.touchCount > 0)
